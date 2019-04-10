@@ -11,6 +11,15 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', 'LoginController@index');
+
+Route::get('/test', function (){
+
+    return view('userpanel');
 });
+Route::get('/login', function ()
+{
+//    return session()->all();
+   return view('userpanel');
+});
+Route::resource('/subscription', 'SubscriptionController');
