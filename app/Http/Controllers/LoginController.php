@@ -15,7 +15,7 @@ class LoginController extends Controller
         $this->provider=new TwitchProvider([
             'clientId'                => 'nbjcw8wo7so2vfqwgq7mbntkezafs8',     // The client ID assigned when you created your application
             'clientSecret'            => '018w89o74vt2rtzyo42hvj0lqslbts', // The client secret assigned when you created your application
-            'redirectUri'             => 'http://mystreamlab.test',  // Your redirect URL you specified when you created your application
+            'redirectUri'             => 'https://mystreamlab.herokuapp.com',  // Your redirect URL you specified when you created your application
             'scopes'                  => ['user:read:email']  // The scopes you would like to request
         ]);
     }
