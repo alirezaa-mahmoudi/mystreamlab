@@ -11,15 +11,25 @@
 |
 */
 
+
 Route::get('/', 'LoginController@index');
+Route::post('/subscription' , 'LoginController@store');
 
-Route::get('/test', function (){
 
-    return view('userpanel');
-});
-Route::get('/login', function ()
+Route::get('/home', function ()
 {
+    if(is_null(\App\User::find(session('id'))))
+    {
+        $user = new \App\User();
+        $user->id = session('id');
+        $user->save();
+    }
 //    return session()->all();
+
    return view('userpanel');
 });
-Route::resource('/subscription', 'SubscriptionController');
+//Route::resource('/subscription', 'SubscriptionController');
+
+
+
+

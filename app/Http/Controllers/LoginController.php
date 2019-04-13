@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Services\TwitchAPI;
 use App\Services\TwitchProvider;
+use App\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -14,7 +16,7 @@ class LoginController extends Controller
             'clientId'                => 'nbjcw8wo7so2vfqwgq7mbntkezafs8',     // The client ID assigned when you created your application
             'clientSecret'            => '018w89o74vt2rtzyo42hvj0lqslbts', // The client secret assigned when you created your application
             'redirectUri'             => 'http://mystreamlab.test',  // Your redirect URL you specified when you created your application
-//    'scopes'                  => ['user:read:broadcast']  // The scopes you would like to request
+            'scopes'                  => ['user:read:email']  // The scopes you would like to request
         ]);
     }
 
@@ -58,16 +60,9 @@ class LoginController extends Controller
                 Session::put('refresh', $accessToken->getRefreshToken());
 
 
-                return redirect('/login');
+                return redirect('/home');
 
 //        echo $user['data'][0]['login'];
-                echo '<html><table>';
-                echo '<tr><th>Access Token</th><td>' . htmlspecialchars($accessToken->getToken()) . '</td></tr>';
-                echo '<tr><th>Refresh Token</th><td>' . htmlspecialchars($accessToken->getRefreshToken()) . '</td></tr>';
-                echo '<tr><th>Username</th><td>' . htmlspecialchars($user["login"]) . '</td></tr>';
-                echo '<tr><th>Bio</th><td>' . htmlspecialchars($user['bio']) . '</td></tr>';
-                echo '<tr><th>Image</th><td><img src="' . htmlspecialchars($user['logo']) . '"></td></tr>';
-                echo '</table></html>';
 
                 // You can now create authenticated API requests through the provider.
 //                $request = $this->provider->getAuthenticatedRequest(
@@ -80,6 +75,34 @@ class LoginController extends Controller
                 exit('Caught exception: '.$e->getMessage());
             }
         }
+
+
+    }
+
+    public function store(Request $request)
+    {
+        $input = $request->all();
+        if(Subscription::where(['user_id' => $input['requester'], 'sub_id' => $input['streamer']])->count() ==0
+            && Subscription::where('sub_id')->count() == 0)
+        {
+            $api = new TwitchAPI();
+            $api->allEvent($input['sub_id']);
+
+            $subscription= new Subscription();
+            $subscription->user_id = $input['requester'];
+            $subscription->sub_id = $input['streamer'];
+            $subscription->sub_name = $input['streamer-login'];
+            $subscription->save();
+        }
+        elseif (Subscription::where(['user_id' => $input['requester'], 'sub_id' => $input['streamer']])->count() ==0)
+        {
+            $subscription= new Subscription();
+            $subscription->user_id = $input['requester'];
+            $subscription->sub_id = $input['streamer'];
+            $subscription->sub_name = $input['streamer-login'];
+            $subscription->save();
+        }
+        return redirect()->route('home');
 
 
     }

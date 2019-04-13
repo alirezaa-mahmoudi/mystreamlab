@@ -116,10 +116,11 @@
                                     <img class="img-responsive img-rounded" id="streamer-pic" src="{{asset('image/general-pic.png')}}" alt="User picture" style="height: 56px;">
                                 </div>
                               <div class="form-group">
-                                 <form action="{{ action('SubscriptionController@store') }}" accept-charset="UTF-8" method="POST" enctype="multipart/form-data">
+                                 <form action="{{ action('LoginController@store') }}" accept-charset="UTF-8" method="POST" enctype="multipart/form-data">
                                 {{csrf_field()}}
-                                <input name="requester" id="requester" type="text" class="form-control" placeholder="requester" hidden>
-                                <input name="streamer" id="streamer" type="text" class="form-control" placeholder="streamer" hidden>
+                                     <input name="requester" id="requester" type="text" class="form-control" hidden>
+                                     <input name="streamer" id="streamer" type="text" class="form-control" hidden>
+                                     <input name="streamer-login" id="streamer-login" type="text" class="form-control" hidden>
 
                                      <button type="submit" class="btn btn-success btn-sm" style="margin: 2px">Verify</button>
                                 </form>
@@ -239,9 +240,11 @@
                 }
                 else
                 {
+
                     $("#streamer-name").html(data.data[0].display_name);
                     $("#streamer-pic").attr('src', data.data[0].profile_image_url);
                     $("#requester").val({{session('id')}});
+                    $("#streamer-login").val(data.data[0].login);
                     $("#streamer").val(data.data[0].id);
                     $("#panel-streamer").slideDown("slow");
 
