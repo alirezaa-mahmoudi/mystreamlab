@@ -27,7 +27,7 @@ Route::get('/home', function ()
 //    return session()->all();
 
    return view('userpanel');
-});
+})->name('home');
 //Route::resource('/subscription', 'SubscriptionController');
 
 
