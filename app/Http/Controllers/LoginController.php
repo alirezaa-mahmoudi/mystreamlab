@@ -83,10 +83,10 @@ class LoginController extends Controller
     {
         $input = $request->all();
         if(Subscription::where(['user_id' => $input['requester'], 'sub_id' => $input['streamer']])->count() ==0
-            && Subscription::where('sub_id')->count() == 0)
+            && Subscription::where($input['streamer'])->count() == 0)
         {
             $api = new TwitchAPI();
-            $api->allEvent($input['sub_id']);
+            $api->allEvent($input['streamer']);
 
             $subscription= new Subscription();
             $subscription->user_id = $input['requester'];
