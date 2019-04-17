@@ -29,7 +29,7 @@ On the second page (livestream), the user is able to watch a live stream and use
 
 Q1: 
 To deploy a Laravel web site on AWS, first of all, we should determine about configuration files and migrate it to AWS platform. To record sessions, database and files, we can use ElastiCache, RDS and AWS S3 respectively. Generally we can follow below architecture.
-https://user-images.githubusercontent.com/48668293/56323968-bdd4e680-6182-11e9-92e8-6207b7b1f563.png
+<img src="https://user-images.githubusercontent.com/48668293/56323968-bdd4e680-6182-11e9-92e8-6207b7b1f563.png">
 
 Q2: 
 To build a scalable solution, we should develop stateless process and dispatch the process to different servers. This enables us to have horizentall scalling and also we could take advantage of SNS and SQS features.   
