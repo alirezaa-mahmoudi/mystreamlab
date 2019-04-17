@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
-    <title>Sidebar template</title>
+    <title>StreamerEventViewer</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
@@ -61,12 +61,12 @@
                         <div class="sidebar-submenu">
                             <ul>
                                 <li>
-                                    <a href="#">Streamer Activities
-                                        <span class="badge badge-pill badge-danger">10</span>
+                                    <a href="{{url('/home')}}"> Page 1 - Home
+                                        <span class="badge badge-pill badge-danger"></span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">Trending Events</a>
+                                    <a href="{{url('/livestream')}}">Page 2 - Live Stream</a>
                                 </li>
                             </ul>
                         </div>
@@ -85,7 +85,7 @@
     <!-- sidebar-wrapper  -->
     <main class="page-content">
         <div class="container-fluid">
-            <h2>Pro Sidebar</h2>
+            <h2>Home page</h2>
             <hr>
             <div class="row">
 
@@ -133,33 +133,58 @@
                     </div>
                     </div>
 
-
-            <h5>More templates</h5>
-            <hr>
-            <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                    <div class="card rounded-0 p-0 shadow-sm">
-                        <img src="https://user-images.githubusercontent.com/25878302/53659076-e2204680-3c5a-11e9-8c00-0c10bcd945e6.jpg" class="card-img-top rounded-0" alt="Angular pro sidebar">
-                        <div class="card-body text-center">
-                            <h6 class="card-title">Angular Pro Sidebar</h6>
-                            <a href="https://github.com/azouaoui-med/angular-pro-sidebar" target="_blank" class="btn btn-primary btn-sm">Github</a>
-                            <a href="https://azouaoui-med.github.io/angular-pro-sidebar/demo/" target="_blank" class="btn btn-success btn-sm">Preview</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                    <div class="card rounded-0 p-0 shadow-sm">
-                        <img src="https://user-images.githubusercontent.com/25878302/53659497-016ba380-3c5c-11e9-8dfd-4901ddaf090b.jpg" class="card-img-top rounded-0" alt="Angular pro sidebar">
-                        <div class="card-body text-center">
-                            <h6 class="card-title">Angular Dashboard</h6>
-                            <a href="https://github.com/azouaoui-med/lightning-admin-angular" target="_blank" class="btn btn-primary btn-sm">Github</a>
-                            <a href="https://azouaoui-med.github.io/lightning-admin-angular/demo/" target="_blank" class="btn btn-success btn-sm">Preview</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
+            <br>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="card rounded-0 p-0 shadow-sm">
+                        <div class="card-header">
+                            Your Favorite Streamers
+                        </div>
+                        <div class="card-body text-center">
+                            @foreach($favStreamers as $favStreamer)
+                                <button class="btn btn-info"><span class="fa fa-user"> {{$favStreamer->sub_name}}</span></button>
+                            @endforeach
+
+                        </div>
+                    </div>
             </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="card rounded-0 p-0 shadow-sm">
+                        <div class="card-header">
+                            10 recent Events from your favourite streamers
+                        </div>
+                        <div class="card-body text-center">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Streamer</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Event</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($events as $event)
+                                <tr>
+                                    <th scope="row">{{$loop->index+1}}</th>
+                                    <td>{{$event->sub_name}}</td>
+                                    <td>{{$event->created_at}}</td>
+                                    <td>{{$event->event_des}}</td>
+                                </tr>
+                               @endforeach
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </main>

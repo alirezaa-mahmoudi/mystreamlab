@@ -12,24 +12,10 @@
 */
 
 
-Route::get('/', 'LoginController@index');
+Route::get('/', 'LoginController@index')->name('login');
 Route::post('/subscription' , 'LoginController@store');
 
+Route::get('/home', 'LoginController@home')->name('home')->middleware('authentication');
 
-Route::get('/home', function ()
-{
-    if(is_null(\App\User::find(session('id'))))
-    {
-        $user = new \App\User();
-        $user->id = session('id');
-        $user->save();
-    }
-//    return session()->all();
-
-   return view('userpanel');
-})->name('home');
-//Route::resource('/subscription', 'SubscriptionController');
-
-
-
+Route::get('/livestream', 'LiveController@index')->middleware('authentication');
 

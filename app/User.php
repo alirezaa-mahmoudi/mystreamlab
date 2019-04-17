@@ -31,5 +31,9 @@ class User extends Authenticatable
      *
      * @var array
      */
+    public function user_subscription()
+    {
+        return $this->hasMany('App\Subscription');
+    }
 
 }

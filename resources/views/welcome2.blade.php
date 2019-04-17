@@ -16,12 +16,11 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12 col-lg-12">
-            <div class="card">
-                <div class="card-body d-flex justify-content-center">
-                    <a href={{$authorizationUrl}}><button class="btn alert-primary">Please Login Twitch</button></a>
-
-                </div>
+        <div class="col-md-4 col-lg-4"></div>
+        <div class="col-md-4 col-lg-4 ">
+                {{--<img class="card-img-top justify-content-center" src="{{asset('image/logo1.png')}}" style="height:400px;  ">--}}
+                    <p >First, connect with your Twitch Account:</p>
+                    <a href={{$authorizationUrl}}><img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png" /></a>
 
             </div>
         </div>

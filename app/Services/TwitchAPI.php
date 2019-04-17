@@ -43,7 +43,7 @@ class TwitchAPI
             'form_params' => [
                 'hub.mode' => 'subscribe',
                 'hub.topic' => 'https://api.twitch.tv/helix/users/follows?first=1&to_id='. $userid,
-                'hub.callback' => 'https://mystreamlab.herokuapp.com/api/path/to/callback/handler/' . $userid ,
+                'hub.callback' => 'http://alirezamahmoudi.com/public/api/path/to/callback/handler/' . $userid ,
                 'hub.lease_seconds' => '864000'
             ]
             ]);
@@ -60,7 +60,7 @@ class TwitchAPI
             'form_params' => [
                 'hub.mode' => 'subscribe',
                 'hub.topic' => 'https://api.twitch.tv/helix/users/follows?first=1&from_id='. $userid,
-                'hub.callback' => 'https://mystreamlab.herokuapp.com/api/path/to/callback/handler/' . $userid ,
+                'hub.callback' => 'http://alirezamahmoudi.com/public/api/path/to/callback/handler/' . $userid ,
                 'hub.lease_seconds' => '864000'
             ]
         ]);
@@ -77,7 +77,7 @@ class TwitchAPI
             'form_params' => [
                 'hub.mode' => 'subscribe',
                 'hub.topic' => 'https://api.twitch.tv/helix/streams?user_id='. $userid,
-                'hub.callback' => 'https://mystreamlab.herokuapp.com/api/path/to/callback/handler/' . $userid ,
+                'hub.callback' => 'http://alirezamahmoudi.com/public/api/path/to/callback/handler/' . $userid ,
                 'hub.lease_seconds' => '864000'
             ]
         ]);
@@ -91,6 +91,78 @@ class TwitchAPI
         $this->StreamChange($userid);
     }
 
+    public function unHookNewFollower($userid)
+    {
+        $request = $this->client->request('POST', 'https://api.twitch.tv/helix/webhooks/hub' ,[
+            'headers' => [
+                'Client-ID' => $this->clientId,
+                'Accept' => 'application/json',
+            ],
+            'form_params' => [
+                'hub.mode' => 'unsubscribe',
+                'hub.topic' => 'https://api.twitch.tv/helix/users/follows?first=1&to_id='. $userid,
+                'hub.callback' => 'http://alirezamahmoudi.com/public/api/path/to/callback/handler/' . $userid ,
+                'hub.lease_seconds' => '864000'
+            ]
+        ]);
+        return json_decode($request->getBody()->getContents());
 
+    }
 
+    public function unHookNewFollow($userid)
+    {
+        $request = $this->client->request('POST', 'https://api.twitch.tv/helix/webhooks/hub' ,[
+            'headers' => [
+                'Client-ID' => $this->clientId,
+                'Accept' => 'application/json',
+            ],
+            'form_params' => [
+                'hub.mode' => 'unsubscribe',
+                'hub.topic' => 'https://api.twitch.tv/helix/users/follows?first=1&from_id='. $userid,
+                'hub.callback' => 'http://alirezamahmoudi.com/public/api/path/to/callback/handler/' . $userid ,
+                'hub.lease_seconds' => '864000'
+            ]
+        ]);
+        return json_decode($request->getBody()->getContents());
+
+    }
+    public function unStreamChange($userid)
+    {
+        $request = $this->client->request('POST', 'https://api.twitch.tv/helix/webhooks/hub' ,[
+            'headers' => [
+                'Client-ID' => $this->clientId,
+                'Accept' => 'application/json',
+            ],
+            'form_params' => [
+                'hub.mode' => 'unsubscribe',
+                'hub.topic' => 'https://api.twitch.tv/helix/streams?user_id='. $userid,
+                'hub.callback' => 'http://alirezamahmoudi.com/public/api/path/to/callback/handler/' . $userid ,
+                'hub.lease_seconds' => '864000'
+            ]
+        ]);
+        return json_decode($request->getBody()->getContents());
+
+    }
+    public function unsubscribe($user_id)
+    {
+        $this->unHookNewFollow($user_id);
+        $this->unHookNewFollower($user_id);
+        $this->unStreamChange($user_id);
+    }
+    public function Authorization()
+    {
+        try {
+            $this->client->request('GET', 'https://api.twitch.tv/kraken/user', [
+                'headers' => [
+                    'Client-ID' => 'nbjcw8wo7so2vfqwgq7mbntkezafs8',
+                    'Authorization' => 'OAuth ' . session('token')
+                ]
+            ]);
+            return 1;
+        }catch (\Exception $e)
+        {
+            return 0;
+        }
+
+    }
 }

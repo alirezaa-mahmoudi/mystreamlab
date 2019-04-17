@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Services\TwitchAPI;
 use App\Services\TwitchProvider;
 use App\Subscription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
@@ -15,8 +17,8 @@ class LoginController extends Controller
         $this->provider=new TwitchProvider([
             'clientId'                => 'nbjcw8wo7so2vfqwgq7mbntkezafs8',     // The client ID assigned when you created your application
             'clientSecret'            => '018w89o74vt2rtzyo42hvj0lqslbts', // The client secret assigned when you created your application
-            'redirectUri'             => 'https://mystreamlab.herokuapp.com',  // Your redirect URL you specified when you created your application
-            'scopes'                  => ['user:read:email']  // The scopes you would like to request
+            'redirectUri'             => 'http://alirezamahmoudi.com/public',  // Your redirect URL you specified when you created your application
+            'scopes'                  => ['user:read:email','bits:read', 'channel_subscriptions','whispers:read', 'user_read']  // The scopes you would like to request
         ]);
     }
 
@@ -105,5 +107,28 @@ class LoginController extends Controller
         return redirect()->route('home');
 
 
+    }
+
+    public function home()
+    {
+        if(is_null(\App\User::find(session('id'))))
+        {
+            $user = new \App\User();
+            $user->id = session('id');
+            $user->save();
+        }
+
+        $favStreamers = \App\Subscription::where('user_id', session('id'))->get();
+
+        $events = DB::table('events')
+            ->join('subscriptions', 'subscriptions.sub_id', '=','events.owner')
+            ->select('events.*','subscriptions.user_id','subscriptions.sub_name')
+            ->where('subscriptions.user_id', session('id'))
+            ->latest()
+            ->limit(10)->get();
+
+//
+
+        return view('userpanel', compact('favStreamers' , 'events'));
     }
 }
